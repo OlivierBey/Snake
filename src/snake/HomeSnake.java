@@ -5,11 +5,8 @@ import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.GridPane;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 
@@ -18,33 +15,45 @@ public class HomeSnake extends Application {
 	
 	Controller controller= new Controller();
 	
-
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		
 		
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("snake.fxml"));
 		GridPane gridpane = loader.load();
+		
 		Scene scene = new Scene(gridpane);
-		
-		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-		
-            @Override
-            public void handle(KeyEvent event) {
-                switch (event.getCode()) {
-                    case UP:   controller.setGoNorth(true);
-                    case DOWN:  controller.setGoSouth(true); System.out.println("xx "+controller.isGoSouth()); break;
-                    case LEFT:  controller.setGoWest(true); break;
-                    case RIGHT: controller.setGoEast(true); break;
-                   
-				default:
-					break;
-                }
-            }
-
-			
-        });
-		
+		scene.onKeyPressedProperty().bindBidirectional(gridpane.onKeyPressedProperty());
+//		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+//			
+//            @Override
+//            public void handle(KeyEvent event) {
+//            	System.out.println("xxxx "); 
+//                switch (event.getCode()) {
+//                    
+//                case UP:	controller.setAddDirection(controller.getDirection()+1);System.out.println(controller.getDirection()); 
+//                		
+//                		break;
+//                    
+//                case DOWN:	controller.setAddDirection(controller.getDirection()+3); 
+//                System.out.println(controller.getDirection()); 
+//                		break;
+//                    
+//                case LEFT:	controller.setAddDirection(controller.getDirection()+4);System.out.println(controller.getDirection()); 
+//                		break;
+//                   
+//                case RIGHT:	controller.setAddDirection(controller.getDirection()+2); System.out.println(controller.getDirection()); 
+//                		break;
+//				default:
+//					System.out.println("Wrong key!!");
+//                   
+//                }
+//                System.out.println("direction = "+ controller + " " +controller.getDirection()+" "+controller.getAddDirection()) ;
+//                }
+//            
+//            
+//			
+//        });
 		
 		primaryStage.setResizable(false);
 		primaryStage.setScene(scene);
@@ -60,6 +69,7 @@ public class HomeSnake extends Application {
 	
 		public static void main(String[] args) {
 			Application.launch();
+			
 		
 	}
 

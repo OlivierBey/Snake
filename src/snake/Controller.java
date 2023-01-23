@@ -1,18 +1,17 @@
 package snake;
 
 
-import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
+import javafx.scene.input.InputEvent;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -20,13 +19,14 @@ import javafx.scene.shape.Shape;
 
 
 public class Controller {
-	int x ,y;
+	int x ,y=5;
 	int length = 3;
 	private Node[][] setsquares= new Node[15][13];
 	ArrayList<Node> snakeBlocks= new ArrayList<>();
-	private boolean goNorth= false, goSouth= false, goEast= true, goWest= false;
-	
-	
+	//private boolean goNorth, goSouth, goEast, goWest;
+	Random random= new Random();
+	int randomX,randomY;
+	private int direction, addDirection;
 	
 	 public void initialize() {
 		 
@@ -37,13 +37,25 @@ public class Controller {
 
     private void setsnake() {
     	for (int i = 0; i < length; i++) {
-    		Rectangle rect= (Rectangle) setsquares[i][0];
-    		y=0; x=i;
+    		Rectangle rect= (Rectangle) setsquares[i][y];
+    		 x=i;
 			AddSnakeBlocks(rect);
     	}
+    	
+    	System.out.println("eenmaal?");
+    	direction=2;
     	movesnake();
+    	setCandy();
 	}
 	
+	private void setCandy() {
+		randomX = random.nextInt(15);
+		randomY = random.nextInt(13);
+		Rectangle rectCandy= (Rectangle)setsquares[randomX][randomY];
+		rectCandy.setFill(Color.YELLOW);
+		
+	}
+
 	private void AddSnakeBlocks(Node rect) {
 		((Shape) rect).setFill(Color.RED);
 		snakeBlocks.add(rect);
@@ -65,30 +77,110 @@ public class Controller {
 			@Override
 			public void run() {
 				nextPosition();
+				
 			}
 		};
 		timer.schedule(task, 1000, 500);
 	}
 
 	protected void nextPosition() {
-		checkDirection();
-		System.out.println(x+" "+y);
+		
+		if(x== randomX && y== randomY) {
+			length++;
+			setCandy();
+			
+		}
+		
+		
 		AddSnakeBlocks(setsquares[x][y]);
-		if(x==14) {
+		if(direction==2 && x==14) {
 			x=x-15;
 		}
-		if(y==12) {
+		if(direction==3 && y==12) {
 			y=y-13;
 		}
+		if(direction==4 && x==0) {
+			x=x+15;
+		}
+		if(direction==1 && y==0) {
+			y=y+13;
+		}
+		checkDirection();
 		
 	}
 
 	private void checkDirection() {
+		 
+		 
+		if(direction==1 ) {
+			if( addDirection==2) {
+				x++;
+				direction=2; addDirection=0;
+			} else if(addDirection==4){
+				x--;
+				direction = 4; addDirection=0;
+			} else {
+				y--;addDirection=0;
+			}
+		}
+		
+		if(direction==2 ) {
+			if( addDirection==1) {
+				y--;
+				direction=1; addDirection=0;	
+			} else if(addDirection==3){
+				y++;
+				direction = 3; addDirection=0;
+			} else {
+				x++;addDirection=0;
+			}
+		}
+		if( direction==3) {
+			if( addDirection==2) {
+				x++;
+				direction=2;	
+			} else if(addDirection==4){
+				x--;
+				direction = 4;
+			} else {
+				y++;addDirection=0;
+			}
+		}
+		
+		if( direction==4) {
+			if( addDirection==1) {
+				y--;
+				direction=1;	
+			} else if(addDirection==3){
+				y++;
+				direction = 3;
+			} else {
+				x--;addDirection=0;
+			}
+		}
+		
+			
 		
 		
 		
-		System.out.println("North:"+goNorth+"  South:"+goSouth+"  East:"+goEast+"  West:"+goWest);
-		x++;
+		grid.setOnKeyPressed(new EventHandler<KeyEvent>() {
+		      @Override public void handle(KeyEvent event) {
+		    	  System.out.print("key pressed ");
+		        switch (event.getCode()) {
+		          case UP:    addDirection=1; System.out.println(direction+" "+direction+addDirection); break;
+		          case RIGHT: addDirection=2;System.out.println(direction+" "+direction+addDirection); break;
+		          case DOWN:  addDirection=3;System.out.println(direction+" "+direction+addDirection); break;
+		          case LEFT:  addDirection=4;System.out.println(direction+" "+direction+addDirection); break;
+				default:
+					System.out.println("wrong key");
+		        }
+		        
+		      }
+		    });
+		
+		
+		//System.out.println("North:"+isGoNorth()+"  South:"+isGoSouth()+"  East:"+isGoEast()+"  West:"+isGoWest());
+		
 	}
 
 	private void createfield() {
@@ -131,13 +223,26 @@ public class Controller {
 	public void setGoEast(boolean goEast) {
 		this.goEast = goEast;
 	}
-
+	public int getDirection() {
+		return direction;
+	}
+	public void setDirection(int direction) {
+		this.direction= direction;
+	}
 	public boolean isGoWest() {
 		return goWest;
 	}
 
 	public void setGoWest(boolean goWest) {
 		this.goWest = goWest;
+	}
+
+	public int getAddDirection() {
+		return addDirection;
+	}
+
+	public void setAddDirection(int addDirection) {
+		this.addDirection = addDirection;
 	}
 
 	@FXML
