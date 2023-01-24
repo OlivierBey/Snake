@@ -23,7 +23,7 @@ public class Controller {
 	int length = 3;
 	private Node[][] setsquares= new Node[15][13];
 	ArrayList<Node> snakeBlocks= new ArrayList<>();
-	//private boolean goNorth, goSouth, goEast, goWest;
+	
 	Random random= new Random();
 	int randomX,randomY;
 	private int direction, addDirection;
@@ -42,7 +42,7 @@ public class Controller {
 			AddSnakeBlocks(rect);
     	}
     	
-    	System.out.println("eenmaal?");
+    	
     	direction=2;
     	movesnake();
     	setCandy();
@@ -77,9 +77,9 @@ public class Controller {
 			@Override
 			public void run() {
 				nextPosition();
-				
 			}
 		};
+		
 		timer.schedule(task, 1000, 500);
 	}
 
@@ -88,9 +88,7 @@ public class Controller {
 		if(x== randomX && y== randomY) {
 			length++;
 			setCandy();
-			
 		}
-		
 		
 		AddSnakeBlocks(setsquares[x][y]);
 		if(direction==2 && x==14) {
@@ -174,12 +172,8 @@ public class Controller {
 				default:
 					System.out.println("wrong key");
 		        }
-		        
 		      }
 		    });
-		
-		
-		//System.out.println("North:"+isGoNorth()+"  South:"+isGoSouth()+"  East:"+isGoEast()+"  West:"+isGoWest());
 		
 	}
 
@@ -191,58 +185,10 @@ public class Controller {
 				r.setWidth(30);
 				r.setFill(Color.GREEN);
 				r.setVisible(true);
-				
 				grid.add(r, i, j);
 				setsquares[i][j]= r;
-				
 			}
 		}
-		
-	}
-
-	public boolean isGoNorth() {
-		return goNorth;
-	}
-
-	public void setGoNorth(boolean goNorth) {
-		this.goNorth = goNorth;
-	}
-
-	public boolean isGoSouth() {
-		return goSouth;
-	}
-
-	public void setGoSouth(boolean goSouth) {
-		this.goSouth = goSouth;
-	}
-
-	public boolean isGoEast() {
-		return goEast;
-	}
-
-	public void setGoEast(boolean goEast) {
-		this.goEast = goEast;
-	}
-	public int getDirection() {
-		return direction;
-	}
-	public void setDirection(int direction) {
-		this.direction= direction;
-	}
-	public boolean isGoWest() {
-		return goWest;
-	}
-
-	public void setGoWest(boolean goWest) {
-		this.goWest = goWest;
-	}
-
-	public int getAddDirection() {
-		return addDirection;
-	}
-
-	public void setAddDirection(int addDirection) {
-		this.addDirection = addDirection;
 	}
 
 	@FXML
